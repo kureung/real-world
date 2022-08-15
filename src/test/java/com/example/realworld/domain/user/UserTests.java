@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.example.realworld.domain.user.exception.DuplicatedFollowingUserException;
+import com.example.realworld.domain.user.exception.NotFoundFollowingException;
 import com.example.realworld.domain.user.model.User;
 import com.example.realworld.domain.user.model.UserAccountInfo;
 import com.example.realworld.web.exception.ErrorCode;
@@ -13,7 +14,7 @@ import java.util.HashSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class UserTests {
+class UserTests {
 
     @Test
     void updateUserTest() {
@@ -79,6 +80,36 @@ public class UserTests {
         assertThatThrownBy(() -> user.follow(followedUser))
                 .isInstanceOf(DuplicatedFollowingUserException.class)
                 .hasMessage(ErrorCode.DuplicatedFollowingUser.message());
+    }
+
+    @Test
+    @DisplayName("팔로우 해제 기능")
+    void unfollowUserTest() {
+        // given
+        User user = getUser();
+        User followedUser = getAnotherUser();
+        user.follow(followedUser);
+
+        // when
+        user.unfollow(followedUser);
+
+        // then
+        assertThat(user.followingEmails()).hasSize(0);
+    }
+
+    @Test
+    @DisplayName("팔로우 안한 유저를 팔로우 해제시 예외 발생")
+    void unfollowUserDuplicateExceptionTest() {
+        // given
+        User user = getUser();
+        User followedUser = getAnotherUser();
+        user.follow(followedUser);
+        user.unfollow(followedUser);
+
+        // when, then
+        assertThatThrownBy(() -> user.unfollow(followedUser))
+                .isInstanceOf(NotFoundFollowingException.class)
+                .hasMessage(ErrorCode.Not_Found_Following.message());
     }
 
     private User getUser() {

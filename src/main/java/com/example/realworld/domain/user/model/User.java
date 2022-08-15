@@ -1,5 +1,9 @@
 package com.example.realworld.domain.user.model;
 
+import com.example.realworld.domain.user.exception.DuplicatedFollowingUserException;
+import com.example.realworld.web.exception.ErrorCode;
+import java.util.Collection;
+import java.util.Set;
 import lombok.Builder;
 import lombok.ToString;
 
@@ -12,11 +16,14 @@ public class User {
 
     private String image;
 
+    private final Set<String> followingEmails;
+
     @Builder
-    private User(UserAccountInfo userAccountInfo, String bio, String image) {
+    private User(UserAccountInfo userAccountInfo, String bio, String image, Set<String> followingEmails) {
         this.userAccountInfo = userAccountInfo;
         this.bio = bio;
         this.image = image;
+        this.followingEmails = followingEmails;
     }
 
     public UserAccountInfo accountInfo() {
@@ -52,6 +59,22 @@ public class User {
 
     public void changeEncodedPassword(String password) {
         userAccountInfo.changeEncodedPassword(password);
+    }
+
+    public void follow(User followedUser) {
+        verifyDuplicateFollowEmail(followedUser);
+        followingEmails.add(followedUser.email());
+    }
+
+    public Collection<String> followingEmails() {
+        return followingEmails.stream()
+                .toList();
+    }
+
+    private void verifyDuplicateFollowEmail(User followedUser) {
+        if (followingEmails.contains(followedUser.email())) {
+            throw new DuplicatedFollowingUserException(ErrorCode.DuplicatedFollowingUser);
+        }
     }
 
 }

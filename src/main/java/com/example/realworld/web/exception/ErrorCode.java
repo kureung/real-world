@@ -14,10 +14,14 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     NO_SUCH_USER_ELEMENT("회원을 조회할 수 없습니다.", HttpStatus.NOT_FOUND),
+
     NOT_VALID_TOKEN("유효한 토큰이 아닙니다.", HttpStatus.FORBIDDEN),
-    NOT_FOUND_REQUESTS("", HttpStatus.NOT_FOUND),
+
     DUPLICATED_EMAIL("이미 존재하는 이메일입니다.", HttpStatus.UNPROCESSABLE_ENTITY),
-    Not_Valid_Login("아이디 또는 비밀번호가 틀렸습니다.", HttpStatus.NOT_FOUND);
+
+    Not_Valid_Login("아이디 또는 비밀번호가 틀렸습니다.", HttpStatus.NOT_FOUND),
+
+    DuplicatedFollowingUser("이미 팔로우한 유저입니다.", HttpStatus.UNPROCESSABLE_ENTITY);
 
     private final String message;
     private final HttpStatus status;

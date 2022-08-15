@@ -5,6 +5,7 @@ import lombok.ToString;
 
 @ToString
 public class UserAccountInfo {
+
     private String username;
 
     private String email;

@@ -1,7 +1,7 @@
 package com.example.realworld.repository.user;
 
-import com.example.realworld.domain.user.model.User;
 import com.example.realworld.domain.user.UserRepository;
+import com.example.realworld.domain.user.model.User;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,6 +23,11 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findByEmail(String email) {
         return jpaRepository.findByUserAccountInfoEmbedEmail(email)
                 .map(UserEntity::convertToDomainModel);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return jpaRepository.existsByUserAccountInfoEmbedEmail(email);
     }
 
 }

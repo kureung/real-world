@@ -7,4 +7,6 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByUserAccountInfoEmbedEmail(String email);
 
+    boolean existsByUserAccountInfoEmbedEmail(String email);
+
 }

@@ -3,6 +3,7 @@ package com.example.realworld.repository.user;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.example.realworld.domain.user.model.UserAccountInfo;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class UserAccountInfoEmbed {
 
     private String username;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
@@ -26,19 +28,19 @@ public class UserAccountInfoEmbed {
         this.password = password;
     }
 
-    public UserAccountInfo convertToDomainModel() {
-        return UserAccountInfo.builder()
-                .username(username)
-                .email(email)
-                .password(password)
-                .build();
-    }
-
     public static UserAccountInfoEmbed convertToEntity(UserAccountInfo userAccountInfo) {
         return UserAccountInfoEmbed.builder()
                 .username(userAccountInfo.username())
                 .email(userAccountInfo.email())
                 .password(userAccountInfo.password())
+                .build();
+    }
+
+    public UserAccountInfo convertToDomainModel() {
+        return UserAccountInfo.builder()
+                .username(username)
+                .email(email)
+                .password(password)
                 .build();
     }
 

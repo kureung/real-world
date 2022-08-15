@@ -12,23 +12,19 @@ public interface UserRepository {
 
     Optional<User> findByEmail(String email);
 
+    boolean existsByEmail(String email);
+
     @Slf4j
     class UserFakeRepository implements UserRepository {
 
-        private static class RepositoryHolder {
+        private final Map<String, User> store = new HashMap<>();
 
-            private static final UserRepository INSTANCE = new UserFakeRepository();
-
+        private UserFakeRepository() {
         }
 
         public static UserRepository instance() {
             return UserFakeRepository.RepositoryHolder.INSTANCE;
         }
-
-        private UserFakeRepository() {
-        }
-
-        private final Map<String, User> store = new HashMap<>();
 
         @Override
         public User save(User user) {
@@ -45,8 +41,19 @@ public interface UserRepository {
             return Optional.of(store.get(email));
         }
 
+        @Override
+        public boolean existsByEmail(String email) {
+            return store.containsKey(email);
+        }
+
         public void clear() {
             store.clear();
+        }
+
+        private static class RepositoryHolder {
+
+            private static final UserRepository INSTANCE = new UserFakeRepository();
+
         }
 
     }

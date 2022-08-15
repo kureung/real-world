@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import com.example.realworld.domain.user.model.User;
 import com.example.realworld.domain.user.model.UserAccountInfo;
 import org.junit.jupiter.api.Test;
+
 public class UserTests {
 
     @Test

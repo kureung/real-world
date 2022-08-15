@@ -5,11 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.example.realworld.domain.user.UserRepository.UserFakeRepository;
+import com.example.realworld.domain.user.exception.DuplicatedEmailException;
+import com.example.realworld.domain.user.exception.NotFoundUserException;
+import com.example.realworld.domain.user.exception.NotValidLoginException;
 import com.example.realworld.domain.user.model.User;
 import com.example.realworld.domain.user.model.UserAccountInfo;
 import com.example.realworld.domain.user.passwordencoder.PasswordEncryption.FakePasswordEncryption;
 import com.example.realworld.domain.user.service.UserService;
-import java.util.NoSuchElementException;
+import com.example.realworld.web.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,13 +65,14 @@ class UserServiceTests {
 
         // when, then
         assertThatThrownBy(() -> sut.login(loginUser))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("비밀번호가 틀립니다.");
+                .isInstanceOf(NotValidLoginException.class)
+                .hasMessage(ErrorCode.Not_Valid_Login.message());
     }
 
     @Test
     @DisplayName("회원가입 테스트")
     void registrationTest() {
+        // given
         UserAccountInfo accountInfo = UserAccountInfo.builder()
                 .username("Jacob")
                 .email("jake@jake.jake")
@@ -79,9 +83,37 @@ class UserServiceTests {
                 .userAccountInfo(accountInfo)
                 .build();
 
-        User savedUser = assertDoesNotThrow(() -> sut.save(user));
+        // when
+        String savedUserEmail = assertDoesNotThrow(() -> sut.save(user));
 
-        assertNotNull(savedUser);
+        // then
+        assertNotNull(savedUserEmail);
+    }
+
+    @Test
+    @DisplayName("회원가입 중복 예외 테스트")
+    void registrationExceptionTest() {
+        // given
+        UserAccountInfo accountInfo = UserAccountInfo.builder()
+                .username("Jacob")
+                .email("jake@jake.jake")
+                .password("jakejake")
+                .build();
+
+        User user1 = User.builder()
+                .userAccountInfo(accountInfo)
+                .build();
+
+        assertDoesNotThrow(() -> userRepository.save(user1));
+
+        User user2 = User.builder()
+                .userAccountInfo(accountInfo)
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> sut.save(user2))
+                .isInstanceOf(DuplicatedEmailException.class)
+                .hasMessage(ErrorCode.DUPLICATED_EMAIL.message());
     }
 
     @Test
@@ -115,8 +147,8 @@ class UserServiceTests {
 
         // when, then
         assertThatThrownBy(() -> sut.findByEmail(user.email()))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("해당 유저가 없습니다.");
+                .isInstanceOf(NotFoundUserException.class)
+                .hasMessage(ErrorCode.NO_SUCH_USER_ELEMENT.message());
     }
 
     private User savedUser() {

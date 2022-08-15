@@ -45,4 +45,14 @@ public final class UserResponse {
                 .build();
     }
 
+    public static UserResponse convertToResponseDto(User user, String token) {
+        return UserResponse.builder()
+                .email(user.email())
+                .username(user.username())
+                .bio(user.bio())
+                .image(user.image())
+                .token(token)
+                .build();
+    }
+
 }

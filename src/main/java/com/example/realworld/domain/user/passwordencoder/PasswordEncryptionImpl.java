@@ -19,4 +19,5 @@ public class PasswordEncryptionImpl implements PasswordEncryption {
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
+
 }

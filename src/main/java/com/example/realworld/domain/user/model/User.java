@@ -1,6 +1,7 @@
 package com.example.realworld.domain.user.model;
 
 import com.example.realworld.domain.user.exception.DuplicatedFollowingUserException;
+import com.example.realworld.domain.user.exception.NotFoundFollowingException;
 import com.example.realworld.web.exception.ErrorCode;
 import java.util.Collection;
 import java.util.Set;
@@ -71,14 +72,21 @@ public class User {
                 .toList();
     }
 
+    public void unfollow(User followedUser) {
+        verifyFollowingLookup(followedUser);
+        followingEmails.remove(followedUser.email());
+    }
+
     private void verifyDuplicateFollowEmail(User followedUser) {
         if (followingEmails.contains(followedUser.email())) {
             throw new DuplicatedFollowingUserException(ErrorCode.DuplicatedFollowingUser);
         }
     }
 
-    public void unfollow(User followedUser) {
-        followingEmails.remove(followedUser.email());
+    private void verifyFollowingLookup(User followedUser) {
+        if (!followingEmails.contains(followedUser.email())) {
+            throw new NotFoundFollowingException(ErrorCode.Not_Found_Following);
+        }
     }
 
 }

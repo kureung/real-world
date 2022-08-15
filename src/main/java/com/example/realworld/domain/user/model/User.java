@@ -77,4 +77,8 @@ public class User {
         }
     }
 
+    public void unfollow(User followedUser) {
+        followingEmails.remove(followedUser.email());
+    }
+
 }

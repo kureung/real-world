@@ -96,6 +96,21 @@ public class UserTests {
         assertThat(user.followingEmails()).hasSize(0);
     }
 
+    @Test
+    @DisplayName("팔로우 안한 유저를 팔로우 해제시 예외 발생")
+    void unfollowUserDuplicateExceptionTest() {
+        // given
+        User user = getUser();
+        User followedUser = getAnotherUser();
+        user.follow(followedUser);
+        user.unfollow(followedUser);
+
+        // when, then
+        assertThatThrownBy(() -> user.unfollow(followedUser))
+                .isInstanceOf(NotFoundFollowingException.class)
+                .hasMessage(ErrorCode.NotFoundFollowing.message());
+    }
+
     private User getUser() {
         UserAccountInfo accountInfo = UserAccountInfo.builder()
                 .username("name")

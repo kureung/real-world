@@ -81,6 +81,21 @@ public class UserTests {
                 .hasMessage(ErrorCode.DuplicatedFollowingUser.message());
     }
 
+    @Test
+    @DisplayName("팔로우 해제 기능")
+    void unfollowUserTest() {
+        // given
+        User user = getUser();
+        User followedUser = getAnotherUser();
+        user.follow(followedUser);
+
+        // when
+        user.unfollow(followedUser);
+
+        // then
+        assertThat(user.followingEmails()).hasSize(0);
+    }
+
     private User getUser() {
         UserAccountInfo accountInfo = UserAccountInfo.builder()
                 .username("name")

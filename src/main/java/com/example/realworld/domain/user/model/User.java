@@ -79,7 +79,7 @@ public class User {
 
     private void verifyDuplicateFollowEmail(User followedUser) {
         if (followingEmails.contains(followedUser.email())) {
-            throw new DuplicatedFollowingUserException(ErrorCode.DuplicatedFollowingUser);
+            throw new DuplicatedFollowingUserException(ErrorCode.DUPLICATED_FOLLOWING_USER);
         }
     }
 

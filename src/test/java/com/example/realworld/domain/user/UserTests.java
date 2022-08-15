@@ -79,7 +79,7 @@ class UserTests {
         // then
         assertThatThrownBy(() -> user.follow(followedUser))
                 .isInstanceOf(DuplicatedFollowingUserException.class)
-                .hasMessage(ErrorCode.DuplicatedFollowingUser.message());
+                .hasMessage(ErrorCode.DUPLICATED_FOLLOWING_USER.message());
     }
 
     @Test

@@ -21,7 +21,7 @@ public enum ErrorCode {
 
     Not_Valid_Login("아이디 또는 비밀번호가 틀렸습니다.", HttpStatus.NOT_FOUND),
 
-    DuplicatedFollowingUser("이미 팔로우한 유저입니다.", HttpStatus.UNPROCESSABLE_ENTITY),
+    DUPLICATED_FOLLOWING_USER("이미 팔로우한 유저입니다.", HttpStatus.UNPROCESSABLE_ENTITY),
 
     Not_Found_Following("팔로잉을 찾을 수 없습니다.", HttpStatus.UNPROCESSABLE_ENTITY),
     ;

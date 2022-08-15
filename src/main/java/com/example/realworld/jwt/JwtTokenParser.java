@@ -20,7 +20,7 @@ public class JwtTokenParser implements TokenParser {
     }
 
     public String findEmailByToken(String token) {
-        verifyingTheAuthenticationHeader(token);
+        verifyToken(token);
         Claims claims = parsedToken(token);
         return (String) claims.get("email");
     }
@@ -32,8 +32,8 @@ public class JwtTokenParser implements TokenParser {
                 .getBody();
     }
 
-    private void verifyingTheAuthenticationHeader(String header) {
-        if (isNull(header)) {
+    private void verifyToken(String token) {
+        if (isNull(token)) {
             throw new NotValidTokenException(ErrorCode.NOT_VALID_TOKEN);
         }
     }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.example.realworld.domain.user.exception.DuplicatedFollowingUserException;
+import com.example.realworld.domain.user.exception.NotFoundFollowingException;
 import com.example.realworld.domain.user.model.User;
 import com.example.realworld.domain.user.model.UserAccountInfo;
 import com.example.realworld.web.exception.ErrorCode;
@@ -108,7 +109,7 @@ public class UserTests {
         // when, then
         assertThatThrownBy(() -> user.unfollow(followedUser))
                 .isInstanceOf(NotFoundFollowingException.class)
-                .hasMessage(ErrorCode.NotFoundFollowing.message());
+                .hasMessage(ErrorCode.Not_Found_Following.message());
     }
 
     private User getUser() {

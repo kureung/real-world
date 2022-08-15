@@ -14,7 +14,7 @@ import java.util.HashSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class UserTests {
+class UserTests {
 
     @Test
     void updateUserTest() {

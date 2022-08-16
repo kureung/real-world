@@ -94,7 +94,7 @@ class UserTests {
         user.unfollow(followedUser);
 
         // then
-        assertThat(user.followingEmails()).hasSize(0);
+        assertThat(user.followingEmails()).isEmpty();
     }
 
     @Test

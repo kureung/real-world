@@ -66,7 +66,7 @@ class UserServiceTests {
         // when, then
         assertThatThrownBy(() -> sut.login(loginUser))
                 .isInstanceOf(NotValidLoginException.class)
-                .hasMessage(ErrorCode.Not_Valid_Login.message());
+                .hasMessage(ErrorCode.NOT_VALID_LOGIN.message());
     }
 
     @Test

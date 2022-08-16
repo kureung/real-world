@@ -85,7 +85,7 @@ public class User {
 
     private void verifyFollowingLookup(User followedUser) {
         if (!followingEmails.contains(followedUser.email())) {
-            throw new NotFoundFollowingException(ErrorCode.Not_Found_Following);
+            throw new NotFoundFollowingException(ErrorCode.NOT_FOUND_FOLLOWING);
         }
     }
 

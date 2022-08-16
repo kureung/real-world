@@ -48,13 +48,13 @@ public class UserService implements UserUseCase {
 
     private void verifyPassword(User user, User findUser) {
         if (!passwordEncryption.matches(user.password(), findUser.password())) {
-            throw new NotValidLoginException(ErrorCode.Not_Valid_Login);
+            throw new NotValidLoginException(ErrorCode.NOT_VALID_LOGIN);
         }
     }
 
     private User findUserForLogin(User user) {
         return userRepository.findByEmail(user.email())
-                .orElseThrow(() -> new NotValidLoginException(ErrorCode.Not_Valid_Login));
+                .orElseThrow(() -> new NotValidLoginException(ErrorCode.NOT_VALID_LOGIN));
     }
 
     @Override

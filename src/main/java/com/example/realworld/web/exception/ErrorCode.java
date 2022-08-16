@@ -19,11 +19,11 @@ public enum ErrorCode {
 
     DUPLICATED_EMAIL("이미 존재하는 이메일입니다.", HttpStatus.UNPROCESSABLE_ENTITY),
 
-    Not_Valid_Login("아이디 또는 비밀번호가 틀렸습니다.", HttpStatus.NOT_FOUND),
+    NOT_VALID_LOGIN("아이디 또는 비밀번호가 틀렸습니다.", HttpStatus.NOT_FOUND),
 
     DUPLICATED_FOLLOWING_USER("이미 팔로우한 유저입니다.", HttpStatus.UNPROCESSABLE_ENTITY),
 
-    Not_Found_Following("팔로잉을 찾을 수 없습니다.", HttpStatus.UNPROCESSABLE_ENTITY),
+    NOT_FOUND_FOLLOWING("팔로잉을 찾을 수 없습니다.", HttpStatus.UNPROCESSABLE_ENTITY),
     ;
 
     private final String message;

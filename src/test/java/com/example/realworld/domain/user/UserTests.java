@@ -109,7 +109,7 @@ class UserTests {
         // when, then
         assertThatThrownBy(() -> user.unfollow(followedUser))
                 .isInstanceOf(NotFoundFollowingException.class)
-                .hasMessage(ErrorCode.Not_Found_Following.message());
+                .hasMessage(ErrorCode.NOT_FOUND_FOLLOWING.message());
     }
 
     private User getUser() {

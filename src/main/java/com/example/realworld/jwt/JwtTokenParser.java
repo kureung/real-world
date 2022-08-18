@@ -1,9 +1,5 @@
 package com.example.realworld.jwt;
 
-import static java.util.Objects.isNull;
-
-import com.example.realworld.jwt.exception.NotValidTokenException;
-import com.example.realworld.web.exception.ErrorCode;
 import com.example.realworld.web.token.TokenParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +16,6 @@ public class JwtTokenParser implements TokenParser {
     }
 
     public String findEmailByToken(String token) {
-        verifyToken(token);
         Claims claims = parsedToken(token);
         return (String) claims.get("email");
     }
@@ -30,12 +25,6 @@ public class JwtTokenParser implements TokenParser {
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    private void verifyToken(String token) {
-        if (isNull(token)) {
-            throw new NotValidTokenException(ErrorCode.NOT_VALID_TOKEN);
-        }
     }
 
 }

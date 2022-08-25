@@ -4,6 +4,7 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 import com.example.realworld.domain.user.model.User;
+import com.example.realworld.web.token.Token;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -45,13 +46,13 @@ public final class UserResponse {
                 .build();
     }
 
-    public static UserResponse convertToResponseDto(User user, String token) {
+    public static UserResponse convertToResponseDto(User user, Token token) {
         return UserResponse.builder()
                 .email(user.email())
                 .username(user.username())
                 .bio(user.bio())
                 .image(user.image())
-                .token(token)
+                .token("")
                 .build();
     }
 

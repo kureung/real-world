@@ -18,33 +18,11 @@ class UserTests {
 
     @Test
     void updateUserTest() {
-        // given
-        UserAccountInfo accountInfo = UserAccountInfo.builder()
-                .username("name")
-                .email("abc@naver.com")
-                .password("password")
-                .build();
+        User user = user();
+        User newUser = anotherUser();
 
-        User user = User.builder()
-                .userAccountInfo(accountInfo)
-                .bio("I like an apple")
-                .image("www.naver.com")
-                .build();
-
-        UserAccountInfo newAccountInfo = UserAccountInfo.builder()
-                .email("email@naver.com")
-                .build();
-
-        User newUser = User.builder()
-                .userAccountInfo(newAccountInfo)
-                .bio("I like a banana")
-                .image("www.google.com")
-                .build();
-
-        // when
         User updatedUser = assertDoesNotThrow(() -> user.update(newUser));
 
-        // then
         assertAll(
                 () -> assertThat(updatedUser.bio()).isEqualTo(newUser.bio()),
                 () -> assertThat(updatedUser.image()).isEqualTo(newUser.image()),
@@ -55,28 +33,22 @@ class UserTests {
     @Test
     @DisplayName("팔로우 하기")
     void followingTest() {
-        // given
-        User user = getUser();
-        User followedUser = getAnotherUser();
+        User user = user();
+        User followedUser = anotherUser();
 
-        // when
         user.follow(followedUser);
 
-        // then
         assertThat(user.followingEmails()).hasSize(1);
     }
 
     @Test
     @DisplayName("이미 팔로우한 유저를 또 팔로우할 때 예외 발생")
     void followingExceptionTest() {
-        // given
-        User user = getUser();
-        User followedUser = getAnotherUser();
+        User user = user();
+        User followedUser = anotherUser();
 
-        // when
         user.follow(followedUser);
 
-        // then
         assertThatThrownBy(() -> user.follow(followedUser))
                 .isInstanceOf(DuplicatedFollowingUserException.class)
                 .hasMessage(ErrorCode.DUPLICATED_FOLLOWING_USER.message());
@@ -85,34 +57,29 @@ class UserTests {
     @Test
     @DisplayName("팔로우 해제 기능")
     void unfollowUserTest() {
-        // given
-        User user = getUser();
-        User followedUser = getAnotherUser();
+        User user = user();
+        User followedUser = anotherUser();
         user.follow(followedUser);
 
-        // when
         user.unfollow(followedUser);
 
-        // then
         assertThat(user.followingEmails()).isEmpty();
     }
 
     @Test
     @DisplayName("팔로우 안한 유저를 팔로우 해제시 예외 발생")
     void unfollowUserDuplicateExceptionTest() {
-        // given
-        User user = getUser();
-        User followedUser = getAnotherUser();
+        User user = user();
+        User followedUser = anotherUser();
         user.follow(followedUser);
         user.unfollow(followedUser);
 
-        // when, then
         assertThatThrownBy(() -> user.unfollow(followedUser))
                 .isInstanceOf(NotFoundFollowingException.class)
                 .hasMessage(ErrorCode.NOT_FOUND_FOLLOWING.message());
     }
 
-    private User getUser() {
+    private User user() {
         UserAccountInfo accountInfo = UserAccountInfo.builder()
                 .username("name")
                 .email("abc@naver.com")
@@ -127,7 +94,7 @@ class UserTests {
                 .build();
     }
 
-    private User getAnotherUser() {
+    private User anotherUser() {
         UserAccountInfo newAccountInfo = UserAccountInfo.builder()
                 .username("name2")
                 .email("email@naver.com")

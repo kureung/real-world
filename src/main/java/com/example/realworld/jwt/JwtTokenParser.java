@@ -1,29 +1,48 @@
 package com.example.realworld.jwt;
 
+import static com.example.realworld.web.exception.ErrorCode.NOT_VALID_TOKEN;
+
+import com.example.realworld.jwt.config.JwtConfig;
+import com.example.realworld.jwt.exception.NotValidTokenException;
+import com.example.realworld.web.token.Token;
 import com.example.realworld.web.token.TokenParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenParser implements TokenParser {
 
-    private final String secretKey;
+    private static final String EMAIL = "email";
 
-    public JwtTokenParser(@Value("${jwt.token.secret-key}") String secretKey) {
-        this.secretKey = secretKey;
+    private final JwtConfig jwtConfig;
+
+    public JwtTokenParser(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
     }
 
-    public String findEmailByToken(String token) {
+    @Override
+    public String findEmailByToken(Token token) {
+        verifyInvalidToken(token);
         Claims claims = parsedToken(token);
-        return (String) claims.get("email");
+        return (String) claims.get(EMAIL);
     }
 
-    private Claims parsedToken(String token) {
+    @Override
+    public void verifyValidToken(Token token) {
+        if (Objects.isNull(token)) {
+            throw new NotValidTokenException(NOT_VALID_TOKEN);
+        }
+    }
+
+    private void verifyInvalidToken(Token token) {
+    }
+
+    private Claims parsedToken(Token token) {
         return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
+                .setSigningKey(token.toString())
+                .parseClaimsJws("")
                 .getBody();
     }
 

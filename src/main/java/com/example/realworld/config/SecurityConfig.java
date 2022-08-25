@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .logout().disable()
                 .authorizeHttpRequests().anyRequest().permitAll();
+
         http
                 .addFilterBefore(jwtFilter, SecurityContextHolderFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

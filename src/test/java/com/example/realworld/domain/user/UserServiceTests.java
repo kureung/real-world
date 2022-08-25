@@ -13,6 +13,7 @@ import com.example.realworld.domain.user.model.UserAccountInfo;
 import com.example.realworld.domain.user.passwordencoder.PasswordEncryption.FakePasswordEncryption;
 import com.example.realworld.domain.user.service.UserService;
 import com.example.realworld.web.exception.ErrorCode;
+import java.util.HashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,6 @@ class UserServiceTests {
     @Test
     @DisplayName("로그인 테스트")
     void authenticationTest() {
-        // given
         User savedUser = savedUser();
 
         UserAccountInfo loginAccountInfo = UserAccountInfo.builder()
@@ -42,17 +42,14 @@ class UserServiceTests {
                 .userAccountInfo(loginAccountInfo)
                 .build();
 
-        // when
         String loginUserEmail = assertDoesNotThrow(() -> sut.login(loginUser));
 
-        // then
         assertNotNull(loginUserEmail);
     }
 
     @Test
     @DisplayName("로그인 예외 테스트")
     void authenticationExceptionTest() {
-        // given
         User savedUser = savedUser();
 
         UserAccountInfo accountInfo = UserAccountInfo.builder()
@@ -63,7 +60,6 @@ class UserServiceTests {
                 .userAccountInfo(accountInfo)
                 .build();
 
-        // when, then
         assertThatThrownBy(() -> sut.login(loginUser))
                 .isInstanceOf(NotValidLoginException.class)
                 .hasMessage(ErrorCode.NOT_VALID_LOGIN.message());
@@ -72,7 +68,6 @@ class UserServiceTests {
     @Test
     @DisplayName("회원가입 테스트")
     void registrationTest() {
-        // given
         UserAccountInfo accountInfo = UserAccountInfo.builder()
                 .username("Jacob")
                 .email("jake@jake.jake")
@@ -83,17 +78,14 @@ class UserServiceTests {
                 .userAccountInfo(accountInfo)
                 .build();
 
-        // when
         String savedUserEmail = assertDoesNotThrow(() -> sut.save(user));
 
-        // then
         assertNotNull(savedUserEmail);
     }
 
     @Test
     @DisplayName("회원가입 중복 예외 테스트")
     void registrationExceptionTest() {
-        // given
         UserAccountInfo accountInfo = UserAccountInfo.builder()
                 .username("Jacob")
                 .email("jake@jake.jake")
@@ -110,7 +102,6 @@ class UserServiceTests {
                 .userAccountInfo(accountInfo)
                 .build();
 
-        // when, then
         assertThatThrownBy(() -> sut.save(user2))
                 .isInstanceOf(DuplicatedEmailException.class)
                 .hasMessage(ErrorCode.DUPLICATED_EMAIL.message());
@@ -119,20 +110,14 @@ class UserServiceTests {
     @Test
     @DisplayName("조회 테스트")
     void getCurrentUserTest() {
-        // given
         User savedUser = savedUser();
-
-        // when
         User findUser = assertDoesNotThrow(() -> sut.findByEmail(savedUser.email()));
-
-        // then
         assertNotNull(findUser);
     }
 
     @Test
     @DisplayName("조회 예외 테스트")
     void getCurrentUserExceptionTest() {
-        // given
         UserAccountInfo accountInfo = UserAccountInfo.builder()
                 .username("Jacob")
                 .email("jake@jake.jake")
@@ -145,7 +130,6 @@ class UserServiceTests {
                 .image("https://i.stack.imgur.com/xHWG8.jpg")
                 .build();
 
-        // when, then
         assertThatThrownBy(() -> sut.findByEmail(user.email()))
                 .isInstanceOf(NotFoundUserException.class)
                 .hasMessage(ErrorCode.NO_SUCH_USER_ELEMENT.message());
@@ -163,6 +147,21 @@ class UserServiceTests {
                 .build();
 
         return userRepository.save(user);
+    }
+
+    private User user() {
+        UserAccountInfo accountInfo = UserAccountInfo.builder()
+                .username("name")
+                .email("abc@naver.com")
+                .password("password")
+                .build();
+
+        return User.builder()
+                .userAccountInfo(accountInfo)
+                .bio("I like an apple")
+                .image("www.naver.com")
+                .followingEmails(new HashSet<>())
+                .build();
     }
 
 }

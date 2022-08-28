@@ -14,15 +14,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        UserEntity userEntity = UserEntity.convertToEntity(user);
+        UserEntity userEntity = UserEntity.convertedUserEntity(user);
         UserEntity savedUserEntity = jpaRepository.save(userEntity);
-        return savedUserEntity.convertToDomainModel();
+        return savedUserEntity.convertedUserDomainModel();
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         return jpaRepository.findByUserAccountInfoEmbedEmail(email)
-                .map(UserEntity::convertToDomainModel);
+                .map(UserEntity::convertedUserDomainModel);
     }
 
     @Override

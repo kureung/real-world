@@ -38,7 +38,7 @@ public class UserEntity extends BaseEntity {
         this.image = image;
     }
 
-    public static UserEntity convertToEntity(User user) {
+    public static UserEntity convertedUserEntity(User user) {
         return UserEntity.builder()
                 .userAccountInfoEmbed(UserAccountInfoEmbed.convertToEntity(user.accountInfo()))
                 .bio(user.bio())
@@ -46,7 +46,7 @@ public class UserEntity extends BaseEntity {
                 .build();
     }
 
-    public User convertToDomainModel() {
+    public User convertedUserDomainModel() {
         return User.builder()
                 .userAccountInfo(userAccountInfoEmbed.convertToDomainModel())
                 .bio(bio)

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.example.realworld.domain.follow.FollowRepository.FollowFakeRepository;
 import com.example.realworld.domain.user.UserRepository.UserFakeRepository;
 import com.example.realworld.domain.user.exception.DuplicatedEmailException;
 import com.example.realworld.domain.user.exception.NotFoundUserException;
@@ -20,10 +21,13 @@ import org.junit.jupiter.api.Test;
 class UserServiceTests {
 
     private final UserRepository userRepository = UserFakeRepository.instance();
-    private final UserUseCase sut = new UserService(userRepository, FakePasswordEncryption.instance());
+    private final UserUseCase sut = new UserService(
+            userRepository,
+            new FollowFakeRepository(),
+            FakePasswordEncryption.instance());
 
     @BeforeEach
-    void beforeEach() {
+    void 저장소_비우기() {
         UserFakeRepository instance = (UserFakeRepository) userRepository;
         instance.clear();
     }

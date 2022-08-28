@@ -1,8 +1,5 @@
 package com.example.realworld.web.user.dto;
 
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
-
 import com.example.realworld.domain.user.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -11,10 +8,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 @Data
-@ToString
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @JsonTypeName("user")
@@ -36,7 +34,7 @@ public final class UserResponse {
         this.image = image;
     }
 
-    public static UserResponse convertToResponseDto(User user) {
+    public static UserResponse convertedResponseDto(User user) {
         return UserResponse.builder()
                 .email(user.email())
                 .username(user.username())
@@ -45,7 +43,7 @@ public final class UserResponse {
                 .build();
     }
 
-    public static UserResponse convertToResponseDto(User user, String token) {
+    public static UserResponse convertedResponseDto(User user, String token) {
         return UserResponse.builder()
                 .email(user.email())
                 .username(user.username())

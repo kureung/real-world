@@ -1,5 +1,6 @@
 package com.example.realworld.domain.user.service;
 
+import com.example.realworld.domain.follow.FollowRepository;
 import com.example.realworld.domain.user.UserRepository;
 import com.example.realworld.domain.user.UserUseCase;
 import com.example.realworld.domain.user.exception.DuplicatedEmailException;
@@ -19,18 +20,23 @@ public class UserService implements UserUseCase {
 
     private final UserRepository userRepository;
 
+    private final FollowRepository followRepository;
+
     private final PasswordEncryption passwordEncryption;
 
     @Override
     @Transactional
     public String save(User user) {
-        if (userRepository.existsByEmail(user.email())) {
-            throw new DuplicatedEmailException(ErrorCode.DUPLICATED_EMAIL);
-        }
-
+        verifyDuplicatedUser(user);
         String encodedPassword = passwordEncryption.encode(user.password());
         user.changeEncodedPassword(encodedPassword);
         return userRepository.save(user).email();
+    }
+
+    private void verifyDuplicatedUser(User user) {
+        if (userRepository.existsByEmail(user.email())) {
+            throw new DuplicatedEmailException(ErrorCode.DUPLICATED_EMAIL);
+        }
     }
 
     @Override
@@ -63,6 +69,18 @@ public class UserService implements UserUseCase {
         User user = findByEmail(userEmail);
         user.update(newUser);
         return user.email();
+    }
+
+    @Override
+    public void follow(User owner, User followingUser) {
+        followRepository.save(owner, followingUser);
+        owner.follow(followingUser);
+    }
+
+    @Override
+    public void unfollow(User owner, User followingUser) {
+        followRepository.delete(owner, followingUser);
+        owner.unfollow(followingUser);
     }
 
 }

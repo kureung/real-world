@@ -27,7 +27,7 @@ public class UserController {
     public UserResponse getCurrentUser(@RequestHeader String token) {
         String email = tokenParser.findEmailByToken(token);
         User user = userUseCase.findByEmail(email);
-        return UserResponse.convertToResponseDto(user, token);
+        return UserResponse.convertedResponseDto(user, token);
     }
 
     @PutMapping
@@ -36,7 +36,7 @@ public class UserController {
     ) {
         String findUserEmail = tokenParser.findEmailByToken(token);
         String updatedUserEmail = userUseCase.update(findUserEmail, request.convertToDomainModel());
-        return UserResponse.convertToResponseDto(userUseCase.findByEmail(updatedUserEmail), token);
+        return UserResponse.convertedResponseDto(userUseCase.findByEmail(updatedUserEmail), token);
     }
 
 }

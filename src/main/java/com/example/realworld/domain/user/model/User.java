@@ -1,10 +1,7 @@
 package com.example.realworld.domain.user.model;
 
-import com.example.realworld.domain.user.exception.DuplicatedFollowingUserException;
-import com.example.realworld.domain.user.exception.NotFoundFollowingException;
-import com.example.realworld.web.exception.ErrorCode;
-import java.util.Collection;
-import java.util.Set;
+import com.example.realworld.domain.follow.model.Follow;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.ToString;
 
@@ -17,14 +14,14 @@ public class User {
 
     private String image;
 
-    private final Set<String> followingEmails;
+    private final Follow follow;
 
     @Builder
-    private User(UserAccountInfo userAccountInfo, String bio, String image, Set<String> followingEmails) {
+    private User(UserAccountInfo userAccountInfo, String bio, String image, Follow follow) {
         this.userAccountInfo = userAccountInfo;
         this.bio = bio;
         this.image = image;
-        this.followingEmails = followingEmails;
+        this.follow = follow;
     }
 
     public UserAccountInfo accountInfo() {
@@ -62,31 +59,29 @@ public class User {
         userAccountInfo.changeEncodedPassword(password);
     }
 
-    public void follow(User followedUser) {
-        verifyDuplicateFollowEmail(followedUser);
-        followingEmails.add(followedUser.email());
-    }
-
-    public Collection<String> followingEmails() {
-        return followingEmails.stream()
-                .toList();
+    public void follow(User user) {
+        follow.follow(user);
     }
 
     public void unfollow(User followedUser) {
-        verifyFollowingLookup(followedUser);
-        followingEmails.remove(followedUser.email());
+        follow.unfollow(followedUser);
     }
 
-    private void verifyDuplicateFollowEmail(User followedUser) {
-        if (followingEmails.contains(followedUser.email())) {
-            throw new DuplicatedFollowingUserException(ErrorCode.DUPLICATED_FOLLOWING_USER);
-        }
+    public boolean isFollowing(User followedUser) {
+        return follow.isFollowing(followedUser);
     }
 
-    private void verifyFollowingLookup(User followedUser) {
-        if (!followingEmails.contains(followedUser.email())) {
-            throw new NotFoundFollowingException(ErrorCode.NOT_FOUND_FOLLOWING);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userAccountInfo, user.userAccountInfo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userAccountInfo);
     }
 
 }

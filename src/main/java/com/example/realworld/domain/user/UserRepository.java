@@ -4,7 +4,6 @@ import com.example.realworld.domain.user.model.User;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 
 public interface UserRepository {
 
@@ -14,7 +13,6 @@ public interface UserRepository {
 
     boolean existsByEmail(String email);
 
-    @Slf4j
     class UserFakeRepository implements UserRepository {
 
         private final Map<String, User> store = new HashMap<>();
@@ -23,7 +21,13 @@ public interface UserRepository {
         }
 
         public static UserRepository instance() {
-            return UserFakeRepository.RepositoryHolder.INSTANCE;
+            return RepositoryHolder.INSTANCE;
+        }
+
+        private static class RepositoryHolder {
+
+            private static final UserRepository INSTANCE = new UserFakeRepository();
+
         }
 
         @Override
@@ -48,12 +52,6 @@ public interface UserRepository {
 
         public void clear() {
             store.clear();
-        }
-
-        private static class RepositoryHolder {
-
-            private static final UserRepository INSTANCE = new UserFakeRepository();
-
         }
 
     }

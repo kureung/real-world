@@ -1,5 +1,6 @@
 package com.example.realworld.domain.user.model;
 
+import java.util.Objects;
 import lombok.Builder;
 import lombok.ToString;
 
@@ -37,6 +38,19 @@ public class UserAccountInfo {
 
     public void changeEncodedPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserAccountInfo that = (UserAccountInfo) o;
+        return Objects.equals(email, that.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
     }
 
 }

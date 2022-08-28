@@ -26,7 +26,7 @@ public class UsersController {
         User user = request.convertToDomainModel();
         String savedUserEmail = userUseCase.save(user);
         User savedUser = userUseCase.findByEmail(savedUserEmail);
-        return UserResponse.convertToResponseDto(savedUser);
+        return UserResponse.convertedResponseDto(savedUser);
     }
 
     @PostMapping("/login")
@@ -39,7 +39,7 @@ public class UsersController {
 
         String token = tokenFactory.createdTokenByEmail(findUser.email());
         response.addHeader("token", token);
-        return UserResponse.convertToResponseDto(findUser, token);
+        return UserResponse.convertedResponseDto(findUser, token);
     }
 
 }

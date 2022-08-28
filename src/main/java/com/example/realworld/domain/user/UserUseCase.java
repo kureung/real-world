@@ -12,4 +12,8 @@ public interface UserUseCase {
 
     String update(String userEmail, User newUser);
 
+    void follow(User owner, User followingUser);
+
+    void unfollow(User owner, User followingUser);
+
 }

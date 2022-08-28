@@ -23,7 +23,7 @@ public enum ErrorCode {
 
     DUPLICATED_FOLLOWING_USER("이미 팔로우한 유저입니다.", HttpStatus.UNPROCESSABLE_ENTITY),
 
-    NOT_FOUND_FOLLOWING("팔로잉을 찾을 수 없습니다.", HttpStatus.UNPROCESSABLE_ENTITY),
+    NOT_FOUND_FOLLOWING_USER("팔로잉을 찾을 수 없습니다.", HttpStatus.UNPROCESSABLE_ENTITY),
     ;
 
     private final String message;
